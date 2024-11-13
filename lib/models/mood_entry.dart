@@ -1,25 +1,65 @@
+// To parse this JSON data, do
+//
+//     final moodEntry = moodEntryFromJson(jsonString);
+
 import 'dart:convert';
 
-MoodEntry moodEntryFromJson(String str) => MoodEntry.fromJson(json.decode(str));
+List<MoodEntry> moodEntryFromJson(String str) => List<MoodEntry>.from(json.decode(str).map((x) => MoodEntry.fromJson(x)));
 
-String moodEntryToJson(MoodEntry data) => json.encode(data.toJson());
+String moodEntryToJson(List<MoodEntry> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MoodEntry {
-    String greeting;
-    List<String> instructions;
+    String model;
+    String pk;
+    Fields fields;
 
     MoodEntry({
-        required this.greeting,
-        required this.instructions,
+        required this.model,
+        required this.pk,
+        required this.fields,
     });
 
     factory MoodEntry.fromJson(Map<String, dynamic> json) => MoodEntry(
-        greeting: json["greeting"],
-        instructions: List<String>.from(json["instructions"].map((x) => x)),
+        model: json["model"],
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "greeting": greeting,
-        "instructions": List<dynamic>.from(instructions.map((x) => x)),
+        "model": model,
+        "pk": pk,
+        "fields": fields.toJson(),
+    };
+}
+
+class Fields {
+    int user;
+    String mood;
+    DateTime time;
+    String feelings;
+    int moodIntensity;
+
+    Fields({
+        required this.user,
+        required this.mood,
+        required this.time,
+        required this.feelings,
+        required this.moodIntensity,
+    });
+
+    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
+        user: json["user"],
+        mood: json["mood"],
+        time: DateTime.parse(json["time"]),
+        feelings: json["feelings"],
+        moodIntensity: json["mood_intensity"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "user": user,
+        "mood": mood,
+        "time": "${time.year.toString().padLeft(4, '0')}-${time.month.toString().padLeft(2, '0')}-${time.day.toString().padLeft(2, '0')}",
+        "feelings": feelings,
+        "mood_intensity": moodIntensity,
     };
 }

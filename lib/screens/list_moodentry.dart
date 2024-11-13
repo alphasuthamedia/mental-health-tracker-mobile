@@ -19,7 +19,7 @@ class _MoodEntryPageState extends State<MoodEntryPage> {
     
     // Melakukan decode response menjadi bentuk json
     var data = response;
-    print(data);
+    
     // Melakukan konversi data json menjadi object MoodEntry
     List<MoodEntry> listMood = [];
     for (var d in data) {
